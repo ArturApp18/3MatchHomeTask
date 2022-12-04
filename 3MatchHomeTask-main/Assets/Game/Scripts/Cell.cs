@@ -1,15 +1,17 @@
 using UnityEngine;
+using Vector2 = UnityEngine.Vector2;
 
 namespace Game.Scripts
 {
     public class Cell : MonoBehaviour
     {
-        [SerializeField] private Bomb currentBomb;
-        [SerializeField] private bool isOccupied;
         [SerializeField] private Cell underCell;
-        private Vector2 _dirRay = Vector2.down;
-        private bool _isunderCellNotNull;
-        private bool _iscurrentBombNotNull;
+        [SerializeField] private BombsGeneration bombsGenerator;
+
+        public Bomb currentBomb;
+        public bool isOccupied;
+        
+        private Vector2 _dirRayDown = Vector2.down;
 
         private void Start()
         {
@@ -17,7 +19,7 @@ namespace Game.Scripts
             CheckUnderCell();
         }
 
-        private void SetBomb(Bomb bomb)
+        public void SetBomb(Bomb bomb)
         {
             currentBomb = bomb;
             if (currentBomb != null)
@@ -30,6 +32,7 @@ namespace Game.Scripts
         {
             if (underCell != null)
             {
+                Transform position = underCell.transform;
                 if (isOccupied && underCell.isOccupied == false)
                 {
                     Bomb cashCurrentBomb = currentBomb;
@@ -37,18 +40,25 @@ namespace Game.Scripts
                     underCell.currentBomb = cashCurrentBomb;
                     isOccupied = false;
                     underCell.isOccupied = true;
+                    underCell.currentBomb.transform.parent = underCell.transform;
+                }
+
+                if (underCell.currentBomb != null)
+                {
+                    underCell.currentBomb.ChangeBombPosition(position);
                 }
             }
         }
         
         private void CheckUnderCell()
         {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, _dirRay);
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, _dirRayDown);
             if (hit.collider != null)
             {
                 underCell = hit.collider.GetComponent<Cell>();
             }
         }
+
         
     }
 }

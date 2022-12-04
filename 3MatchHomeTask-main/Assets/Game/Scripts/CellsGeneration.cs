@@ -6,9 +6,9 @@ namespace Game.Scripts
     {
         [SerializeField] private Cell cell;
         [SerializeField] private int ySize, xSize;
-        
-        private float _offset = 1.1f;
-        
+
+        private const float Offset = 1.1f;
+
         public Cell[,] Cells;
         
         
@@ -22,15 +22,22 @@ namespace Game.Scripts
             {
                 for (int y = 0; y < ySize; y++)
                 {
-                    float xOffset = _offset;
-                    float yOffset = _offset;
+                    float xOffset = Offset;
+                    float yOffset = Offset;
                     Cell nextCell = Instantiate(cell, new Vector3(startX + (xOffset * x), startY + (yOffset * y), 0), Quaternion.identity);
                     Cells[x,y] = nextCell;
                     nextCell.transform.parent = transform;
                 }
             }
-
             return Cells;
+        }
+
+        private void OnTriggerStay2D(Collider2D col)
+        {
+            if (col.CompareTag("Cell"))
+            {
+                Debug.Log(col.gameObject.tag);
+            }
         }
     }
 }

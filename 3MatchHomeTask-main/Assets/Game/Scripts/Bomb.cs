@@ -12,5 +12,9 @@ namespace Game.Scripts
         {
             cell = GetComponentInParent<Cell>();
         }
+        public void ChangeBombPosition(Transform target)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, target.position, fallingSpeed * Time.deltaTime);
+        }
     }
 }
