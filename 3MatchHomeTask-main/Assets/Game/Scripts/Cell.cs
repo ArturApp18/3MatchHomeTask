@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Vector2 = UnityEngine.Vector2;
 
@@ -22,34 +23,44 @@ namespace Game.Scripts
         public void SetBomb(Bomb bomb)
         {
             currentBomb = bomb;
+
             if (currentBomb != null)
             {
+                currentBomb.transform.SetParent(transform);
                 isOccupied = true;
             }
         }
 
+        private void DeleteBomb()
+        {
+            Destroy(currentBomb.gameObject);
+            isOccupied = false;
+        }
+        private void OnMouseDown()
+        {
+            DeleteBomb();
+        }
         private void Update()
         {
-            if (underCell != null)
-            {
-                Transform position = underCell.transform;
-                if (isOccupied && underCell.isOccupied == false)
-                {
-                    Bomb cashCurrentBomb = currentBomb;
-                    currentBomb = null;
-                    underCell.currentBomb = cashCurrentBomb;
-                    isOccupied = false;
-                    underCell.isOccupied = true;
-                    underCell.currentBomb.transform.parent = underCell.transform;
-                }
+            if (underCell == null || currentBomb == null)
+                return;
 
-                if (underCell.currentBomb != null)
-                {
-                    underCell.currentBomb.ChangeBombPosition(position);
-                }
+            if (isOccupied && !underCell.isOccupied)
+            {
+                underCell.isOccupied = true;
+                Transform targetPosition = underCell.transform;
+                currentBomb.ChangeBombPosition(targetPosition, OnBombFinishMove);
             }
         }
-        
+
+        private void OnBombFinishMove(Bomb bomb)
+        {
+            underCell.SetBomb(bomb);
+            currentBomb = null;
+
+            isOccupied = false;
+        }
+
         private void CheckUnderCell()
         {
             RaycastHit2D hit = Physics2D.Raycast(transform.position, _dirRayDown);
@@ -58,7 +69,5 @@ namespace Game.Scripts
                 underCell = hit.collider.GetComponent<Cell>();
             }
         }
-
-        
     }
 }

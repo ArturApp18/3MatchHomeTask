@@ -38,19 +38,17 @@ namespace Game.Scripts
 
         private void Update()
         {
-            StartCoroutine(Respawn());
+            Respawn();
         }
 
-        private IEnumerator Respawn()
+        private void Respawn()
         {
-            
             foreach (Cell cell in firstLineCells)
             {
-                _color = Random.Range(0, bombsAmount);
-                if (cell.isOccupied == false)
+                if (!cell.isOccupied)
                 {
+                    _color = Random.Range(0, bombsAmount);
                     cell.SetBomb(Instantiate(bombPrefabs[_color], cell.transform.position, Quaternion.identity));
-                    yield return new WaitForSeconds(1f);
                 }
             }
         }

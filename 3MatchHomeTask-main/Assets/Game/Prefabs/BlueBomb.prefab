@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cell: {fileID: 0}
+  threshold: 0
   fallingSpeed: 1
 --- !u!1 &8767819455955214243
 GameObject:

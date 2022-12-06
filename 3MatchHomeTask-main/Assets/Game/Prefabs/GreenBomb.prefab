@@ -130,4 +130,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cell: {fileID: 0}
+  threshold: 0
   fallingSpeed: 1
